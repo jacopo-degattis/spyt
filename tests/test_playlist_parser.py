@@ -1,8 +1,8 @@
 import pytest
 
-from spoyt.errors import PlaylistNotFoundError, SpotifyAPIError
-from spoyt.spotify.models import SkippedItem, Track
-from spoyt.spotify.playlist import parse_playlist_page
+from spyt.errors import PlaylistNotFoundError, SpotifyAPIError
+from spyt.spotify.models import SkippedItem, Track
+from spyt.spotify.playlist import parse_playlist_page
 
 PLAYLIST_ID = "6yNRwWCVVNLEsif1esJ1Cc"
 

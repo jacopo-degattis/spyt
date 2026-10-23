@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import re
 
-from ..errors import SpoytError
+from ..errors import SpytError
 
 _PLAYLIST_ID_RE = re.compile(r"^[A-Za-z0-9]{10,64}$")
 _PLAYLIST_REFERENCE_RE = re.compile(r"(?:spotify:playlist:|playlist/)([A-Za-z0-9]+)")
 
 
-class InvalidPlaylistReference(SpoytError):
+class InvalidPlaylistReference(SpytError):
     """The supplied value does not look like a Spotify playlist reference."""
 
 

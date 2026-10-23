@@ -1,6 +1,6 @@
 import pytest
 
-from spoyt.spotify.ids import InvalidPlaylistReference, parse_playlist_id
+from spyt.spotify.ids import InvalidPlaylistReference, parse_playlist_id
 
 PLAYLIST_ID = "6yNRwWCVVNLEsif1esJ1Cc"
 

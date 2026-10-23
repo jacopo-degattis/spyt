@@ -273,9 +273,9 @@ class SpotifyWebClient:
                             refreshed_hash = True
                             continue
                     raise PersistedQueryNotFoundError(
-                        "Spotify changed the fetchPlaylist query. Spoyt could not "
+                        "Spotify changed the fetchPlaylist query. Spyt could not "
                         "discover the new hash automatically; update "
-                        "SPOYT_FETCH_PLAYLIST_HASH.",
+                        "SPYT_FETCH_PLAYLIST_HASH.",
                         payload=payload,
                     )
 

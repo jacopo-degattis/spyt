@@ -2,8 +2,8 @@ import base64
 
 import pytest
 
-from spoyt.errors import AuthError
-from spoyt.spotify.totp import (
+from spyt.errors import AuthError
+from spyt.spotify.totp import (
     candidate_secrets,
     derive_secret,
     generate_totp,

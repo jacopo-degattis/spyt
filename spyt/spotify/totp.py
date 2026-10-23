@@ -58,7 +58,7 @@ def load_secrets(
                 pass
         raise AuthError(
             "Could not download Spotify's TOTP secrets from "
-            f"{url}. Check your network connection or set SPOYT_SPOTIFY_SECRETS_URL. "
+            f"{url}. Check your network connection or set SPYT_SPOTIFY_SECRETS_URL. "
             f"Underlying error: {exc}"
         ) from exc
 
@@ -132,7 +132,7 @@ def _validate_secrets(data: Any) -> dict[str, list[int]]:
 def _cache_path() -> Path:
     base = os.environ.get("XDG_CACHE_HOME")
     cache_root = Path(base) if base else Path.home() / ".cache"
-    return cache_root / "spoyt" / "spotify_totp_secrets.json"
+    return cache_root / "spyt" / "spotify_totp_secrets.json"
 
 
 def _write_cache(path: Path, data: dict[str, list[int]]) -> None:

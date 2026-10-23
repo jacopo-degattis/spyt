@@ -1,6 +1,6 @@
 import pytest
 
-from spoyt.spotify.client import SpotifyWebClient
+from spyt.spotify.client import SpotifyWebClient
 
 PLAYLIST_ID = "6yNRwWCVVNLEsif1esJ1Cc"
 

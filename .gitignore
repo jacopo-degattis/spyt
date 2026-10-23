@@ -11,5 +11,9 @@ dist/
 # Never commit credentials or exported playlist data
 cookies*.txt
 cookies*.json
+ytmusic_headers*
+*_headers.txt
+headers*.txt
+headers*.json
 *.playlist.json
 out/

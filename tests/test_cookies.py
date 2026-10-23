@@ -2,8 +2,8 @@ import json
 
 import pytest
 
-from spoyt.errors import CookieError
-from spoyt.spotify.cookies import parse_cookies
+from spyt.errors import CookieError
+from spyt.spotify.cookies import parse_cookies
 
 NETSCAPE = """# Netscape HTTP Cookie File
 # https://curl.se/docs/http-cookies.html

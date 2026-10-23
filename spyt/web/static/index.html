@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Transfer a Spotify playlist to YouTube Music. Local-first, no accounts, no servers.">
+  <title>Spyt — Spotify to YouTube Music</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <div class="page">
+    <header class="hero">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12a8 8 0 0 1 13.7-5.6"/><path d="M20 12a8 8 0 0 1-13.7 5.6"/>
+            <path d="M17 3v4h-4"/><path d="M7 21v-4h4"/>
+          </svg>
+        </span>
+        <span class="brand-name">Spyt</span>
+      </div>
+      <h1>Move a Spotify playlist<br><span class="gradient-text">to YouTube Music.</span></h1>
+      <p class="tagline">Paste a link, add your credentials, and let Spyt match every track.</p>
+      <p class="privacy-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        Runs locally. Your credentials never leave this machine.
+      </p>
+    </header>
+
+    <main>
+      <!-- ---------------------------------------------------------- form -->
+      <section id="form-view" class="card">
+        <form id="transfer-form" novalidate>
+          <div class="field">
+            <div class="label-row">
+              <label for="playlist">Spotify playlist</label>
+              <span class="badge subtle">Public or private</span>
+            </div>
+            <div class="input-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+              <input id="playlist" name="playlist" type="text" inputmode="url" autocomplete="off" spellcheck="false"
+                     placeholder="https://open.spotify.com/playlist/…" required>
+            </div>
+            <p class="hint">A link, <code>spotify:playlist:…</code> URI, or a bare playlist ID all work.</p>
+          </div>
+
+          <div class="credentials">
+            <article class="credential" id="cookies-card">
+              <header class="credential-head">
+                <div>
+                  <h2>Spotify cookies</h2>
+                  <p>Used to read your playlist.</p>
+                </div>
+                <span class="badge required">Required</span>
+              </header>
+
+              <div class="dropzone" id="cookies-drop" role="button" tabindex="0" aria-label="Upload Spotify cookies file">
+                <input id="cookies-file" type="file" accept=".txt,.json,text/plain,application/json" hidden>
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+                </svg>
+                <span class="drop-title">Drop a cookies file <span class="link-like">or browse</span></span>
+                <span class="drop-sub">cookies.txt · cookies.json</span>
+              </div>
+
+              <details class="disclosure">
+                <summary>or paste the contents</summary>
+                <textarea id="cookies-text" rows="4" spellcheck="false"
+                          placeholder="sp_dc=…   ·   Netscape cookies.txt   ·   JSON export"></textarea>
+              </details>
+
+              <p class="cred-state" id="cookies-state" hidden></p>
+
+              <details class="disclosure help">
+                <summary>How do I get this?</summary>
+                <ol>
+                  <li>Log in at <a href="https://open.spotify.com" target="_blank" rel="noopener">open.spotify.com</a>.</li>
+                  <li>Export the site cookies with <strong>Get cookies.txt LOCALLY</strong> or <strong>Cookie-Editor</strong>.</li>
+                  <li>Drop the exported <code>cookies.txt</code> or <code>cookies.json</code> above.</li>
+                </ol>
+              </details>
+            </article>
+
+            <article class="credential" id="headers-card">
+              <header class="credential-head">
+                <div>
+                  <h2>YouTube Music headers</h2>
+                  <p>Used to create the playlist.</p>
+                </div>
+                <span class="badge required">Required</span>
+              </header>
+
+              <div class="dropzone" id="headers-drop" role="button" tabindex="0" aria-label="Upload YouTube Music headers file">
+                <input id="headers-file" type="file" accept=".txt,.json,text/plain,application/json" hidden>
+                <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+                </svg>
+                <span class="drop-title">Drop a headers file <span class="link-like">or browse</span></span>
+                <span class="drop-sub">Headers, cURL, or JSON</span>
+              </div>
+
+              <details class="disclosure">
+                <summary>or paste the contents</summary>
+                <textarea id="headers-text" rows="4" spellcheck="false"
+                          placeholder="Cookie: …   ·   Copy request headers   ·   Copy as cURL"></textarea>
+              </details>
+
+              <p class="cred-state" id="headers-state" hidden></p>
+
+              <details class="disclosure help">
+                <summary>How do I get this?</summary>
+                <ol>
+                  <li>Log in at <a href="https://music.youtube.com" target="_blank" rel="noopener">music.youtube.com</a>.</li>
+                  <li>Open DevTools → <strong>Network</strong> and open any playlist.</li>
+                  <li>Right-click the <code>browse</code> request → <strong>Copy</strong> → <strong>Copy request headers</strong>.</li>
+                  <li>Save them to a file (or paste them above).</li>
+                </ol>
+              </details>
+            </article>
+          </div>
+
+          <details class="options" id="options-disclosure">
+            <summary>
+              <span class="options-title">Options</span>
+              <span class="options-hint">Name, privacy, limit, preview</span>
+            </summary>
+            <div class="options-body">
+              <div class="field">
+                <label for="playlist-name">Playlist name</label>
+                <input id="playlist-name" type="text" maxlength="150" placeholder="Defaults to the Spotify name">
+              </div>
+              <div class="field">
+                <label for="privacy">Privacy</label>
+                <select id="privacy">
+                  <option value="private" selected>Private</option>
+                  <option value="unlisted">Unlisted</option>
+                  <option value="public">Public</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="max-items">Limit tracks</label>
+                <input id="max-items" type="number" min="1" step="1" placeholder="All tracks">
+              </div>
+              <div class="field">
+                <label for="min-score">Match confidence <output id="min-score-value" for="min-score">80%</output></label>
+                <input id="min-score" type="range" min="0.5" max="0.95" step="0.01" value="0.80">
+              </div>
+              <label class="check full">
+                <input id="preview" type="checkbox">
+                <span>
+                  <strong>Preview matches first</strong>
+                  <small>Review every match before creating the playlist. Headers become optional.</small>
+                </span>
+              </label>
+            </div>
+          </details>
+
+          <button class="button primary large" id="start-button" type="submit">
+            <span class="spinner" hidden aria-hidden="true"></span>
+            <span class="button-label">Transfer playlist</span>
+            <svg class="button-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+          </button>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <!-- ------------------------------------------------------ progress -->
+      <section id="progress-view" class="card view hidden" aria-live="polite">
+        <div class="progress-head">
+          <div>
+            <p class="eyebrow" id="progress-eyebrow">Transferring</p>
+            <h2 id="stage-title">Starting…</h2>
+            <p class="stage-message" id="stage-message"></p>
+          </div>
+          <button class="button ghost small" id="cancel-button" type="button">Cancel</button>
+        </div>
+
+        <ol class="steps" id="steps">
+          <li data-step="spotify"><span class="step-dot">1</span><span class="step-label">Read</span></li>
+          <li data-step="matching"><span class="step-dot">2</span><span class="step-label">Match</span></li>
+          <li data-step="creating"><span class="step-dot">3</span><span class="step-label">Create</span></li>
+        </ol>
+
+        <div class="bar indeterminate" id="bar"><div class="bar-fill" id="bar-fill"></div></div>
+        <div class="progress-meta">
+          <span id="progress-text">Starting…</span>
+          <span id="progress-pct"></span>
+        </div>
+
+        <div class="counts" id="counts" aria-live="polite"></div>
+
+        <div class="track-toolbar" id="track-toolbar" hidden>
+          <div class="filters" role="group" aria-label="Filter tracks">
+            <button class="filter is-active" data-filter="all" type="button">All <span id="count-all">0</span></button>
+            <button class="filter" data-filter="matched" type="button">Matched</button>
+            <button class="filter" data-filter="unmatched" type="button">Needs review</button>
+            <button class="filter" data-filter="skipped" type="button">Skipped</button>
+          </div>
+        </div>
+
+        <ol class="track-list" id="track-list"></ol>
+        <p class="empty-tracks" id="empty-tracks">Tracks will appear here as they are matched.</p>
+
+        <!-- done -->
+        <div class="panel success-panel hidden" id="done-panel">
+          <div class="panel-icon" aria-hidden="true">✓</div>
+          <div class="panel-body">
+            <h3 id="done-title">Playlist created</h3>
+            <p id="done-message"></p>
+            <div class="actions">
+              <a class="button primary small" id="open-playlist" target="_blank" rel="noopener">Open in YouTube Music</a>
+              <a class="button ghost small" id="download-report">Download report</a>
+              <button class="button ghost small" id="again-button" type="button">Transfer another</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- preview -->
+        <div class="panel preview-panel hidden" id="preview-panel">
+          <div class="panel-icon" aria-hidden="true">◎</div>
+          <div class="panel-body">
+            <h3>Matches ready</h3>
+            <p>Review the list, adjust the name or privacy, then create the playlist.</p>
+            <div class="preview-form">
+              <div class="field">
+                <label for="preview-name">Playlist name</label>
+                <input id="preview-name" type="text" maxlength="150">
+              </div>
+              <div class="field">
+                <label for="preview-privacy">Privacy</label>
+                <select id="preview-privacy">
+                  <option value="private">Private</option>
+                  <option value="unlisted">Unlisted</option>
+                  <option value="public">Public</option>
+                </select>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="button primary small" id="create-button" type="button">Create playlist</button>
+              <a class="button ghost small" id="download-preview">Download report</a>
+            </div>
+            <p class="form-error" id="preview-error" role="alert" hidden></p>
+          </div>
+        </div>
+
+        <!-- error / cancelled -->
+        <div class="panel error-panel hidden" id="error-panel">
+          <div class="panel-icon" aria-hidden="true">!</div>
+          <div class="panel-body">
+            <h3 id="error-title">Something went wrong</h3>
+            <p id="error-message"></p>
+            <div class="actions">
+              <a class="button ghost small hidden" id="error-playlist" target="_blank" rel="noopener">Open partial playlist</a>
+              <button class="button ghost small" id="retry-button" type="button">Start over</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Spyt</span>
+      <span class="dot-sep">·</span>
+      <span>Local-first. No accounts, no servers, no tracking.</span>
+    </footer>
+  </div>
+</body>
+</html>
